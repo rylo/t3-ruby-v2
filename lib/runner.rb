@@ -1,3 +1,5 @@
+require 'game'
+
 class Runner
   attr_reader :game
   

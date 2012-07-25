@@ -88,14 +88,3 @@ describe Game do
     game.current_player.marker.should == PLAYER1_MARKER
   end
 end
-
-
-
-
-
-
-
-
-
-
-

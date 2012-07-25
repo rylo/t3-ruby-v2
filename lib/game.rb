@@ -1,3 +1,6 @@
+require 'player'
+require 'board'
+
 class Game
   attr_reader :player1, :player2, :board, :current_turn, :current_player, :observer
   
