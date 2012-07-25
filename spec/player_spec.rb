@@ -1,4 +1,4 @@
-require 'config'
+require 'spec_config'
 
 describe Player do
   let(:game) { Game.new(PLAYER1_MARKER, PLAYER2_MARKER, BOARD_SIZE) }

@@ -5,18 +5,32 @@ class Board
     @size = board_size.to_i
     @grid = Array.new
     (@size ** 2).times { @grid << '' }
-    self.generate_playable_rows
+    generate_playable_rows
+  end
+  
+  def open_spaces
+    spaces = []
+    grid.each_with_index { |grid_space, index| spaces << index if grid_space == "" }
+    spaces
+  end
+  
+  def make_move(marker, destination)
+    @grid[destination] = marker
+  end
+  
+  def fetch_grid
+    @grid
   end
   
   def generate_playable_rows
     @rows = []
     @grid_space_numbers = []
     
-    self.grid.each_with_index { |space_number, index| @grid_space_numbers << index }
+    grid.each_with_index { |space_number, index| @grid_space_numbers << index }
     
-    self.generate_horizontal_rows
-    self.generate_diagonal_rows
-    self.generate_vertical_rows
+    generate_horizontal_rows
+    generate_diagonal_rows
+    generate_vertical_rows
   end
   
   def generate_horizontal_rows
