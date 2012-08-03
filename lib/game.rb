@@ -61,7 +61,7 @@ class Game
     player_markers.each do |player_marker|
       player_taken_spaces = []
       board.grid.each_with_index { |space_content, space_number| player_taken_spaces << space_number if space_content == player_marker }
-      winning_row = (player_taken_spaces.combination(board.size).to_a & board.rows).first
+      winning_row = ( player_taken_spaces.combination(board.size).to_a.sort! & board.rows ).first
       if board.rows.include?(winning_row)
         set_end_condition("Player #{player_marker} wins!")
         return winning_row

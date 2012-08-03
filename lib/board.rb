@@ -8,6 +8,8 @@ class Board
     generate_playable_rows
   end
   
+  # Take this out of the board class?
+  
   def print_board
     printed_board = []
     processing_rows = @rows[0..(@size-1)]
@@ -44,6 +46,8 @@ class Board
     @grid
   end
   
+  # Abstract this out of the board class?
+  
   def generate_playable_rows
     @rows = []
     @grid_space_numbers = []
@@ -65,9 +69,9 @@ class Board
     guides = [@horizontal_rows, @horizontal_rows.reverse]
     
     guides.each do |guide|
-      @diagonal_rows = []
-      guide.each_with_index {|row, index| @diagonal_rows << row[index]}
-      @rows << @diagonal_rows
+      diagonal_rows = []
+      guide.each_with_index {|row, index| diagonal_rows << row[index]}
+      @rows << diagonal_rows.sort
     end
   end
 

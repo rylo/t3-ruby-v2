@@ -25,4 +25,7 @@ module Console
     @output = output
   end
   
+  def self.set_input(input)
+    @input = input
+  end
 end

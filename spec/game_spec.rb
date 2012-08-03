@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Game do
   let(:game) { Game.new(PLAYER1_MARKER, PLAYER2_MARKER, BOARD_SIZE) }
   let(:board) { game.board }
+  
+  before { Console.set_output(MockOutput.new) }
 
   it "returns a player object" do
     game.player(1).marker.should == PLAYER1_MARKER
@@ -40,7 +42,7 @@ describe Game do
     end
   
     it "should generate playable diagonal rows" do
-      board.generate_playable_rows[3..4].should eq([[0,4,8], [6,4,2]])
+      board.generate_playable_rows[3..4].should eq([[0,4,8], [2,4,6]])
     end
   
     it "should generate playable vertical rows" do
@@ -65,7 +67,7 @@ describe Game do
       game.check_for_win.should == [3,4,5]
     end
     
-    it "sets the games @end_condition when a player wins" do
+    it "sets the games @end_condition when a player wins on a middle horizontal" do
       board.set_move(game.player(2).marker, 3)
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 5)
@@ -79,7 +81,7 @@ describe Game do
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 6)
       game.check_for_win
-      
+          
       game.end_condition.should == "Player #{PLAYER2_MARKER} wins!"
     end
     
@@ -107,16 +109,6 @@ describe Game do
     board.set_move(game.player(1).marker, 3)
     board.set_move(game.player(2).marker, 2)
     game.current_player.marker.should == PLAYER1_MARKER
-  end
-  
-  it "asks for a move" do
-    pending "learning how to test console IO"
-    game.get_move.should == "Please make a move:"
-  end 
-  
-  it "first should be true on the first move" do
-    pending "learning how to test console IO"
-    game.get_move
   end
   
   it "sets an end_condition" do

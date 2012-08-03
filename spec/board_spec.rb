@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe Board do
+  let(:console) { Console }
   let(:game) { Game.new(PLAYER1_MARKER, PLAYER2_MARKER, BOARD_SIZE) }
   let(:board) { Board.new('3') }
+  
+  before { Console.set_output(MockOutput.new) }
   
   it "should have a size" do
     board.size.should be(3)
@@ -10,20 +13,18 @@ describe Board do
   
   describe "#print_board" do
     it "should print the board" do
-      pending "integrating mocks"
-      board.print_board.should == ["||||", "||||", "||||"]
+      board.print_board
+      console.output.messages.last(3).should == ["||||", "||||", "||||"]
     end
   end
   
   describe '#validate_move' do
     it "should return 'invalid' when a user's move is not a valid spot on the board" do
-      pending "integrating mocks"
       destination = 'x'
       board.validate_move(destination).should == "invalid"
     end
   
     it "should return 'invalid' when a user's destination is already taken" do
-      pending "integrating mocks"
       board.set_move(PLAYER1_MARKER, 0)
       destination = '0'
       board.validate_move(destination).should == "invalid"
@@ -39,7 +40,7 @@ describe Board do
   end
   
   it "should have an array of diagonal winnable rows" do
-    board.rows[(BOARD_SIZE)..(BOARD_SIZE+1)].should == [[0, 4, 8], [6, 4, 2]]
+    board.rows[(BOARD_SIZE)..(BOARD_SIZE+1)].should == [[0, 4, 8], [2, 4, 6]]
   end
   
   it "should have a square grid" do
