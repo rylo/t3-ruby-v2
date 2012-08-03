@@ -1,8 +1,9 @@
 require 'player'
 require 'board'
+require 'console'
 
 class Game
-  attr_reader :board, :current_turn, :current_player
+  attr_reader :board, :current_turn, :current_player, :end_condition
   
   def initialize(player1_marker, player2_marker, board_size)
     generate_players(player1_marker, player2_marker)
@@ -10,6 +11,7 @@ class Game
     set_current_player
     
     @current_turn = 1
+    @end_condition = nil
   end
   
   def generate_board(board_size)
@@ -43,8 +45,13 @@ class Game
     end
   end
   
+  def set_end_condition(condition)
+    @end_condition = condition
+  end
+  
   def increment_turn
     @current_turn += 1
+    set_end_condition("Draw!") if @current_turn > @board.grid.count
   end
   
   def check_for_win
@@ -55,20 +62,31 @@ class Game
       player_taken_spaces = []
       board.grid.each_with_index { |space_content, space_number| player_taken_spaces << space_number if space_content == player_marker }
       winning_row = (player_taken_spaces.combination(board.size).to_a & board.rows).first
-      return winning_row if board.rows.include?(winning_row)
+      if board.rows.include?(winning_row)
+        set_end_condition("Player #{player_marker} wins!")
+        return winning_row
+      end
     end
   end
   
-  def ask_for_move(current_player)
-    "Please make a move:"
+  def get_move
+    board = self.board
+    Console.put_message("Player #{current_player.marker}'s turn.")
+    destination = Console.ask_for_input
+    get_move if board.validate_move(destination) == "invalid"
+    board.set_move(@current_player.marker, destination)
   end
   
   def start_loop
-    while current_turn < self.board.grid.count
-      set_current_player
+    while @end_condition.nil?
+      board.print_board
+      get_move
       increment_turn
+      set_current_player
+      check_for_win
     end
-    'ended'
+    Console.put_message(@end_condition)
+    board.print_board
   end
   
 end

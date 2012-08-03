@@ -8,13 +8,35 @@ class Board
     generate_playable_rows
   end
   
+  def print_board
+    printed_board = []
+    processing_rows = @rows[0..(@size-1)]
+    
+    processing_rows.each do |processing_row|
+      printed_row = '|'
+      processing_row.each { |space| printed_row += @grid[space] + "|" }
+      printed_board << printed_row
+    end
+    
+    printed_board.each { |printed_row| Console.put_message(printed_row) }
+    printed_board
+  end
+  
   def open_spaces
     spaces = []
     grid.each_with_index { |grid_space, index| spaces << index if grid_space == "" }
     spaces
   end
   
-  def make_move(marker, destination)
+  def validate_move(destination) 
+    if !open_spaces.include?(destination.to_i) || destination.to_i.to_s != destination
+      Console.put_message("Invalid move.")
+      return "invalid"
+    end
+  end
+  
+  def set_move(marker, destination)
+    destination = destination.to_i
     @grid[destination] = marker
   end
   
