@@ -1,28 +1,47 @@
 require 'spec_helper'
 
 describe Game do
-  let(:game) { Game.new(PLAYER1_MARKER, PLAYER2_MARKER, BOARD_SIZE) }
+  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
   let(:board) { game.board }
   
   before { Console.set_output(MockOutput.new) }
+  before { Console.set_input(MockInput.new) }
 
-  it "returns a player object" do
-    game.player(1).marker.should == PLAYER1_MARKER
-  end
+  describe "#initialize" do
+    it "returns a player object" do
+      game.player(1).marker.should == PLAYER1_MARKER
+    end
 
-  it "creates two players" do
-    game.generate_players(PLAYER1_MARKER, PLAYER2_MARKER)
-    game.player(1).marker.should == PLAYER1_MARKER
-    game.player(2).marker.should == PLAYER2_MARKER
-  end
-
-  it "creates a board with a size" do
-    game.generate_board(3)
-    game.board.size.should == BOARD_SIZE
-  end
+    it "creates two players with markers" do
+      game.player(1).marker.should == PLAYER1_MARKER
+      game.player(2).marker.should == PLAYER2_MARKER
+    end
   
-  it "starts with turn 1" do
-    game.current_turn.should eq(1)
+    it "creates two human players" do
+      game.player(1).class.should == HumanPlayer
+      game.player(2).class.should == HumanPlayer
+    end
+    
+    it "creates a human and computer player" do
+      game = Game.new(PLAYER1_MARKER, EasyComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE)
+    
+      game.player(1).class.should == EasyComputer
+      game.player(2).class.should == HumanPlayer
+    end
+
+    it "creates a board with a size" do
+      game.generate_board(3)
+      game.board.size.should == BOARD_SIZE
+    end
+  
+    it "starts with turn 1" do
+      game.current_turn.should eq(1)
+    end
+    
+    it "should have a current_player with player1's marker" do
+      game.set_first_player
+      game.current_player.marker.should == PLAYER1_MARKER
+    end
   end
   
   it "increments the game's current_turn by one" do
@@ -38,15 +57,15 @@ describe Game do
   
   describe "#generate_playable_rows" do
     it "should generate playable horizontal rows" do
-      board.generate_playable_rows[0..2].should eq([[0,1,2], [3,4,5], [6,7,8]])
+      board.generate_rows[0..2].should eq([[0,1,2], [3,4,5], [6,7,8]])
     end
   
     it "should generate playable diagonal rows" do
-      board.generate_playable_rows[3..4].should eq([[0,4,8], [2,4,6]])
+      board.generate_rows[3..4].should eq([[0,4,8], [2,4,6]])
     end
   
     it "should generate playable vertical rows" do
-      board.generate_playable_rows[5..7].should eq([[0,3,6], [1,4,7], [2,5,8]])
+      board.generate_rows[5..7].should eq([[0,3,6], [1,4,7], [2,5,8]])
     end
   end
   
@@ -93,10 +112,6 @@ describe Game do
       
       game.end_condition.should == "Player #{PLAYER2_MARKER} wins!"
     end
-  end
-  
-  it "should have a current_player with player1's marker" do
-    game.current_player.marker.should == PLAYER1_MARKER
   end
   
   it "should have a current_player that changes after the first turn" do

@@ -17,6 +17,11 @@ module Console
     get_user_input
   end
   
+  def self.ask_for_first_player
+    output.puts "Who goes first?"
+    get_user_input
+  end
+  
   def self.put_message(message)
     output.puts message.to_s
   end

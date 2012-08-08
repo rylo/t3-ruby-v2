@@ -10,7 +10,7 @@ describe Console do
   
   it "accepts user input" do
     console.get_user_input
-    console.input.last_message.should == "0"
+    console.input.last_message.should == "1"
   end
   
   it "asks for a user to make a move" do
@@ -21,6 +21,11 @@ describe Console do
   it "should put_message" do
     console.put_message("Invalid move.")
     console.output.last_message.should == "Invalid move."
+  end
+  
+  it "#ask_for_first_player should return a valid player" do
+    console.ask_for_first_player
+    console.input.last_message.should == "1"
   end
   
   it "allows me to set output" do

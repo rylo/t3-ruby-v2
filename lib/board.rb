@@ -3,12 +3,11 @@ class Board
   
   def initialize(board_size)
     @size = board_size.to_i
-    @grid = Array.new
-    (@size ** 2).times { @grid << '' }
-    generate_playable_rows
+    @grid = Array.new(@size ** 2, '')
+    generate_rows
   end
   
-  # Take this out of the board class?
+  # Take this out of the board class? BP: yeah, probs
   
   def print_board
     printed_board = []
@@ -26,14 +25,72 @@ class Board
   
   def open_spaces
     spaces = []
-    grid.each_with_index { |grid_space, index| spaces << index if grid_space == "" }
+    grid.each_with_index { |grid_space, index| spaces << index unless spot_taken?(index) }
     spaces
   end
   
-  def validate_move(destination) 
-    if !open_spaces.include?(destination.to_i) || destination.to_i.to_s != destination
+  def playable_rows
+    playable_rows = []
+    open_spaces.each do |open_space|
+      rows.each { |row| playable_rows << row if row.include?(open_space) }
+    end
+    playable_rows.uniq
+  end
+  
+  def view_row_markers(row)
+    row_markers = []
+    row.each { |space_number| row_markers << grid[space_number] }
+    row_markers
+  end
+  
+  def unique_markers(row)
+    view_row_markers(row).uniq.select { |marker| marker != '' }
+  end
+  
+  def ending_move_available?
+    ending_move_rows != []
+  end
+  
+  def ending_move_rows
+    ending_rows = []
+    playable_rows.each do |row|
+      if unique_markers(row).count == 1
+        ending_rows << row if row.select { |space_number| spot_taken?(space_number) }.count == (@size - 1)
+      end
+    end
+    ending_rows
+  end
+  
+  def select_ending_move(player)
+    winning_move = []
+    blocking_move = []
+    
+    ending_move_rows.each do |row|    
+      if view_row_markers(row).select { |spot| spot == player.marker }.count == (@size - 1)
+        winning_move << row[view_row_markers(row).rindex('')]
+      else
+        blocking_move << row[view_row_markers(row).rindex('')]
+      end
+    end
+    
+    if winning_move.count > 0
+      return winning_move.first
+    else
+      return blocking_move.first
+    end
+  end
+  
+  def spot_taken?(destination)
+    grid[destination] != ""
+  end
+  
+  def valid_move?(destination) 
+    if spot_taken?(destination.to_i) || destination.to_i.to_s != destination
       Console.put_message("Invalid move.")
-      return "invalid"
+      false
+    else
+      Console.put_message("Move made.")
+      true
     end
   end
   
@@ -48,7 +105,7 @@ class Board
   
   # Abstract this out of the board class?
   
-  def generate_playable_rows
+  def generate_rows
     @rows = []
     @grid_space_numbers = []
     

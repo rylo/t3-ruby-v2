@@ -5,10 +5,10 @@ require 'console'
 class Game
   attr_reader :board, :current_turn, :current_player, :end_condition
   
-  def initialize(player1_marker, player2_marker, board_size)
-    generate_players(player1_marker, player2_marker)
+  def initialize(player1_marker, player1_type, player2_marker, player2_type, board_size)
+    generate_players(player1_marker, player1_type, player2_marker, player2_type)
     generate_board(board_size)
-    set_current_player
+    set_first_player
     
     @current_turn = 1
     @end_condition = nil
@@ -18,9 +18,9 @@ class Game
     @board = Board.new(board_size)
   end
   
-  def generate_players(player1_marker, player2_marker)
-    @player1 = Player.new(player1_marker)
-    @player2 = Player.new(player2_marker)
+  def generate_players(player1_marker, player1_type, player2_marker, player2_type)
+    @player1 = player1_type.new(player1_marker)
+    @player2 = player2_type.new(player2_marker)
   end
   
   def player(number)
@@ -32,16 +32,22 @@ class Game
     end
   end
   
-  def set_current_player
-    if @current_player.nil?
-      @current_player = @player1 
+  def set_first_player
+    first_player = Console.ask_for_first_player.to_i
+    if player(first_player).nil?
+      Console.put_message("Invalid player number.")
+      set_first_player
     else
-      case @current_player
-        when @player2
-          @current_player = @player1
-        when @player1
-          @current_player = @player2
-      end
+      @current_player = player(first_player)
+    end
+  end
+  
+  def set_current_player
+    case @current_player
+      when @player2
+        @current_player = @player1
+      when @player1
+        @current_player = @player2
     end
   end
   
@@ -69,18 +75,10 @@ class Game
     end
   end
   
-  def get_move
-    board = self.board
-    Console.put_message("Player #{current_player.marker}'s turn.")
-    destination = Console.ask_for_input
-    get_move if board.validate_move(destination) == "invalid"
-    board.set_move(@current_player.marker, destination)
-  end
-  
   def start_loop
     while @end_condition.nil?
       board.print_board
-      get_move
+      @current_player.get_move(self.board)
       increment_turn
       set_current_player
       check_for_win
