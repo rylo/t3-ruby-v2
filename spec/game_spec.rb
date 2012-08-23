@@ -141,11 +141,4 @@ describe Game do
       game.current_turn.should == 1
     end
   end
-  
-  describe "#next_player" do
-    it "should return the player whose turn is next" do
-      game.next_player.should == game.player(2)
-    end
-  end
-
 end

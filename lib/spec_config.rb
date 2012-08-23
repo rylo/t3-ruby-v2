@@ -1,9 +1,11 @@
 gem 'rspec'
+
 require 'game'
 require 'board'
 require 'player'
-require 'move'
+require 'runner'
+require 'console'
 
 PLAYER1_MARKER = 'x'
 PLAYER2_MARKER = 'o'
-BOARD_SIZE = '3'
+BOARD_SIZE = 3

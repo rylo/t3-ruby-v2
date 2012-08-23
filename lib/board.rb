@@ -7,10 +7,6 @@ class Board
     generate_rows
   end
   
-  def clear_space(space_number)
-    grid[space_number.to_i] = ''
-  end
-  
   # Take this out of the board class? BP: yeah, probs
   
   def print_board
@@ -65,36 +61,23 @@ class Board
     ending_rows
   end
   
-  def winning_move_available?(marker)    
-    verdict = false
+  def select_ending_move(player)
+    winning_move = []
+    blocking_move = []
+    
     ending_move_rows.each do |row|    
-      if view_row_markers(row).reject{|spot_content| spot_content == ''}.select{|spot| spot == marker}.count == (@size - 1)
-        verdict = true
+      if view_row_markers(row).select { |spot| spot == player.marker }.count == (@size - 1)
+        winning_move << row[view_row_markers(row).rindex('')]
+      else
+        blocking_move << row[view_row_markers(row).rindex('')]
       end
     end
-    return verdict
-  end
-  
-  def won_by?(player_marker)
-    verdict = false
-    @rows.each do |row|
-      verdict = true if view_row_markers(row).select{|spot| spot == player_marker}.count == @size
+    
+    if winning_move.count > 0
+      return winning_move.first
+    else
+      return blocking_move.first
     end
-    return verdict
-  end
-  
-  def won?
-    verdict = false
-    @rows.each do |row|
-      if unique_markers(row).count == 1 && view_row_markers(row).select { |marker| marker == '' }.count == 0
-        verdict = true
-      end
-    end
-    return verdict
-  end
-  
-  def draw?
-    self.open_spaces.count == 0 && !self.won?
   end
   
   def spot_taken?(destination)

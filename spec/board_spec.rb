@@ -78,16 +78,21 @@ describe Board do
     end
   end
   
-  describe "#winning_move_available?(player)" do
+  describe "#select_ending_move(player)" do
     it "returns a grid location for a win" do
       board.set_move(game.player(1).marker, 0)
-      board.winning_move_available?(game.player(1).marker).should == false
-      
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(2).marker, 3)
       board.set_move(game.player(2).marker, 4)
-      board.winning_move_available?(game.player(1).marker).should == true
-      board.winning_move_available?(game.player(2).marker).should == true
+
+      board.select_ending_move(game.player(1)).should == 2
+    end
+    
+    it "returns a grid location to stop an opponent's win" do
+      board.set_move(game.player(2).marker, 3)
+      board.set_move(game.player(2).marker, 4)
+
+      board.select_ending_move(game.player(1)).should == 5
     end
   end
   
@@ -106,7 +111,6 @@ describe Board do
   
   describe "#spot_taken?" do
     it "should return false if the spot on the grid is taken" do
-      board.spot_taken?(0).should == false
       board.set_move(game.player(1).marker, 0) 
       board.spot_taken?(0).should == true
     end
@@ -135,69 +139,6 @@ describe Board do
       board.unique_markers([0,3,6]).sort.should == ['o', 'x']
     end
   end
-  
-  describe "open spaces" do
-    it "should return an array of empty spaces" do
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
-      board.set_move(game.player(2).marker, 3)
-      
-      board.open_spaces.should == [4, 5, 6, 7, 8]
-    end
-  end
-  
-  describe "#clear_space" do
-    it "should replace the grid space with an empty string" do      
-      board.set_move(game.player(1).marker, 0)
-      
-      board.spot_taken?(0).should == true
-      board.clear_space(0)
-      board.spot_taken?(0).should == false
-    end
-  end
-  
-  
-  describe "#won_by?(player_marker)" do
-    it "should return true if the game is won by the player" do      
-      board.set_move(game.player(1).marker, 0)
-      board.won_by?(game.player(1).marker).should == false
-      
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
-      
-      board.won_by?(game.player(1).marker).should == true
-    end
-  end
-  
-  describe "#won?" do
-    it "should return true if the game is won by any player" do      
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
-      
-      board.won?.should == true
-    end
-  end
-  
-  describe "#draw?" do
-    it "should return true if the board is full and there is no winner" do      
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 2)
-      board.set_move(game.player(1).marker, 3)
-      board.set_move(game.player(1).marker, 7)
-      
-      board.set_move(game.player(2).marker, 1)
-      board.set_move(game.player(2).marker, 4)
-      board.set_move(game.player(2).marker, 5)
-      board.set_move(game.player(2).marker, 6)
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 8)
-      
-      board.draw?.should == true
-    end
-  end
-  
 end
 
 

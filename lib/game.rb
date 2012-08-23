@@ -33,8 +33,7 @@ class Game
   end
   
   def set_first_player
-    first_player = 1
-    #first_player = Console.ask_for_first_player.to_i
+    first_player = Console.ask_for_first_player.to_i
     if player(first_player).nil?
       Console.put_message("Invalid player number.")
       set_first_player
@@ -50,10 +49,6 @@ class Game
       when @player1
         @current_player = @player2
     end
-  end
-  
-  def next_player
-    @current_player == @player1 ? @player2 : @player1
   end
   
   def set_end_condition(condition)
@@ -93,31 +88,3 @@ class Game
   end
   
 end
-
-class GameFactory
-  def initialize(player1_marker, player1_type, player2_marker, player2_type, board_size)
-    @game = Game.new(player1_marker, player1_type, player2_marker, player2_type, board_size)
-  end
-  
-  def get_game
-    @game
-  end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
