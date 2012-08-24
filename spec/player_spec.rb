@@ -33,8 +33,8 @@ describe EasyComputer do
   end
 end
 
-describe HardComputer do
-  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, HardComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
+describe UltimateComputer do
+  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, UltimateComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
   let(:game)        { gamefactory.get_game }
   let(:board)       { game.board }
   

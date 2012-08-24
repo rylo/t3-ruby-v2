@@ -21,7 +21,7 @@ class EasyComputer < Player
   end
 end
 
-class HardComputer < Player  
+class UltimateComputer < Player  
   def get_move(board)
     super
     
@@ -35,28 +35,32 @@ class HardComputer < Player
       
     board.open_spaces.each do |open_space|
       opponent = get_other_player(self.marker)
-      board.set_move(opponent, open_space)      
-      score = minimax(board, opponent)
+      board.set_move(self.marker, open_space)     
+      score = -minimax(board, opponent)
       
       if score >= best_score
+        if best_score == score
+          best_spots << open_space
+        elsif score > best_score
+          best_spots = []
+          best_spots << open_space
+        end
         best_score = score
-        best_score != score ? best_spots = [open_space] : best_spots << open_space
       end
       board.clear_space(open_space)
     end
-
     return best_spots.shuffle.first
   end
     
   def minimax(board, player_marker)
-    best_score = -99999
+    best_score = -99
     best_spot = -1
 
     if board.draw? || board.won?
       best_score = get_score(board, player_marker)
-    else
+    else # keep on truckin'
       board.open_spaces.shuffle.each do |open_space|
-        board.set_move(self.marker, open_space)
+        board.set_move(player_marker, open_space)
         opponent = get_other_player(player_marker)
         score = -minimax(board, opponent)
 
@@ -79,7 +83,7 @@ class HardComputer < Player
       if board.won_by?(marker)
         return 2
       else
-        return 1
+        return -1
       end
     end
   end
