@@ -45,12 +45,11 @@ class Game
       @current_player.get_move(self.board)
       set_current_player
     end
-    
-    board.report_end_condition
+    report_end_state
     board.print_board
   end
   
-  def report_end_condition
+  def report_end_state
     if board.won?
       board.won_by?(player(1)) ? player = player(1) : player = player(2) 
       message = "Player #{player.marker} wins!"
@@ -71,20 +70,6 @@ class GameFactory
     @game
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -131,13 +131,7 @@ class Board
     destination = destination.to_i
     @grid[destination] = marker
   end
-  
-  def fetch_grid
-    @grid
-  end
-  
-  # Abstract this out of the board class?
-  
+    
   def generate_rows
     @rows = []
     @grid_space_numbers = []

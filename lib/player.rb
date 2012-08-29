@@ -31,9 +31,7 @@ class UltimateComputer < Player
   def find_best_move(board)
     best_score = -99
     best_spots = []
-    
-    return 4 if board.open_spaces.count == (board.size ** 2)
-    
+      
     board.open_spaces.each do |open_space|
       opponent = get_other_player(self.marker)
       board.set_move(self.marker, open_space)

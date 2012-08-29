@@ -58,11 +58,10 @@ describe Board do
     board.grid.count.should be(board.size.to_i**2)
   end
   
-  describe "#set_move and #fetch_grid" do  
-    it "#fetch_grid returns the grid and #set_move places a move on the grid" do
-      board.fetch_grid.should == ["","","","","","","","",""]
+  describe "#set_move" do  
+    it "#set_move places a move on the grid" do
       board.set_move(PLAYER1_MARKER, 3)
-      board.fetch_grid.should == ["","","",PLAYER1_MARKER,"","","","",""]
+      board.grid.should == ["","","",PLAYER1_MARKER,"","","","",""]
     end
   end
   

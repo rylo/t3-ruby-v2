@@ -64,6 +64,7 @@ describe Game do
   it "changes the current_player after the second turn" do    
     board.set_move(game.player(1).marker, 3)
     board.set_move(game.player(2).marker, 2)
+    
     game.current_player.marker.should == PLAYER1_MARKER
   end
   
@@ -73,7 +74,7 @@ describe Game do
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_condition.should == ["Player #{PLAYER2_MARKER} wins!"]
+      game.report_end_state.should == ["Player #{PLAYER2_MARKER} wins!"]
     end
     
     it "stops the loop when the game is a draw" do
@@ -87,17 +88,17 @@ describe Game do
       board.set_move(game.player(1).marker, 7)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_condition.should == ["Draw!"]
+      game.report_end_state.should == ["Draw!"]
     end
   end
   
-  describe "#report_end_condition" do
-    it "should return the ending condition of the game" do
+  describe "#report_end_state" do
+    it "should return the ending state of the game" do
       board.set_move(game.player(2).marker, 0)
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_condition.should == ["Player #{PLAYER2_MARKER} wins!"]
+      game.report_end_state.should == ["Player #{PLAYER2_MARKER} wins!"]
     end
   end
 
