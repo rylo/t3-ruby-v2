@@ -34,7 +34,7 @@ describe EasyComputer do
 end
 
 describe UltimateComputer do
-  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, UltimateComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
+  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, UltimateComputer, PLAYER2_MARKER, UltimateComputer, BOARD_SIZE) }
   let(:game)        { gamefactory.get_game }
   let(:board)       { game.board }
   
@@ -84,26 +84,39 @@ describe UltimateComputer do
   
   describe "#find_best_move" do
     it "should return a best move the player can make" do
-      #game.player(1).find_best_move(board).should == 4
+      game.player(1).find_best_move(board).should == 4
       
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(1).marker, 2)
-      board.set_move(game.player(1).marker, 4)
-      
+      board.set_move(game.player(1).marker, 4)      
       board.set_move(game.player(2).marker, 1)
       
-      board.winning_moves(game.player(1).marker).should == [6,8]
       [6,8].include?(game.player(1).find_best_move(board)).should == true
+    end
+    
+    it "should return a best move the player can make" do   
+      board.set_move(game.player(1).marker, 0)
+      board.set_move(game.player(1).marker, 4)
+      board.set_move(game.player(2).marker, 8)
+      
+      [6,2].include?(game.player(2).find_best_move(board)).should == true
+    end
+    
+    it "should return a best move the player can make" do    
+      board.set_move(game.player(1).marker, 4)
+      
+      [0,2,6,8].include?(game.player(2).find_best_move(board)).should == true
     end
   end
   
   describe "#depth_score(depth)" do
     it "should return the score for the depth" do
-      game.player(1).depth_score(0).should == 0.9
-      game.player(1).depth_score(1).should == 0.6
-      game.player(1).depth_score(2).should == 0.3
+      game.player(1).depth_score(0).should == 4
+      game.player(1).depth_score(1).should == 3
+      game.player(1).depth_score(2).should == 2
+      game.player(1).depth_score(3).should == 1
     end
   end
-
+  
 end
 

@@ -15,7 +15,6 @@ class EasyComputer < Player
     super
     
     destination = board.open_spaces.shuffle.first
-    
     board.set_move(self.marker, destination)
     destination
   end
@@ -32,16 +31,14 @@ class UltimateComputer < Player
   def find_best_move(board)
     best_score = -99
     best_spots = []
-      
+    
+    return 4 if board.open_spaces.count == (board.size ** 2)
+    
     board.open_spaces.each do |open_space|
       opponent = get_other_player(self.marker)
-      board.set_move(self.marker, open_space)   
-      score = -minimax(board, opponent, depth = 0)
+      board.set_move(self.marker, open_space)
+      board.open_spaces.count == (board.size ** 2) && open_space == 4 ? score = 1000 : score = -minimax(board, opponent, depth = 0)      
       board.clear_space(open_space)
-      score = score + 1 if board.open_spaces.count == (board.size ** 2) && open_space == 4
-      
-      p board.grid
-      p score
       
       if score >= best_score
         if best_score == score
@@ -60,18 +57,17 @@ class UltimateComputer < Player
     best_score = -99
     best_spot = -1
 
-    if board.draw? || board.won? || board.ending_move_available? || depth == 2
+    if board.draw? || board.won? || depth == 3
       best_score = get_score(board, player_marker) * depth_score(depth)
     else
       board.open_spaces.shuffle.each do |open_space|
         board.set_move(player_marker, open_space)
+        
         opponent = get_other_player(player_marker)
         score = -minimax(board, opponent, depth + 1)
-
-        if score > best_score
-          best_score = score
-        end
         board.clear_space(open_space)
+        
+        best_score = score if score > best_score
       end
     end
     
@@ -82,12 +78,12 @@ class UltimateComputer < Player
     opponent_marker = get_other_player(player_marker)
     multiplier = 0.20
     
-    if board.draw?
-      return 0
-    elsif board.won?
-      board.won_by?(player_marker) ? 1 : -1
+    if board.won?
+      board.won_by?(player_marker) ? 100 : -100
+    elsif board.ending_move_available?
+      board.winning_move_available?(player_marker) ? multiplier * board.winning_moves(player_marker).count : -multiplier * board.winning_moves(opponent_marker).count 
     else
-      board.winning_move_available?(player_marker) ? multiplier * board.winning_moves(player_marker).count : -multiplier * board.winning_moves(opponent_marker).count
+      return 0
     end
   end
   
@@ -96,14 +92,7 @@ class UltimateComputer < Player
   end
   
   def depth_score(depth)
-    case depth
-    when 2
-      return 0.3
-    when 1
-      return 0.6
-    when 0
-      return 0.9
-    end
+   depth = depth - ((depth-2)*2)
   end
   
 end
