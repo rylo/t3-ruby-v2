@@ -44,20 +44,7 @@ describe UltimateComputer do
     game.player(1).class.superclass.should == Player
     game.player(1).class.should == UltimateComputer
   end
-  
-  describe "#minimax" do
-    it "should make an uber AI that puts GlaDoS to shame (at tic-tac-toe)" do
-      pending "Fixing the scoring algorithm"
-      
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(2).marker, 1)
-      board.set_move(game.player(1).marker, 8)
-      board.set_move(game.player(2).marker, 2)
-      
-      game.player(1).find_best_move(board).should == 4
-    end
-  end
-  
+    
   describe "#get_score" do
     it "should return a score based on whether or not player can make a game-ending move" do
       board.set_move(game.player(1).marker, 0)

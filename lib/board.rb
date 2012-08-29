@@ -95,6 +95,10 @@ class Board
     return verdict
   end
   
+  def game_over?
+    self.won? || self.draw?
+  end
+  
   def won?
     verdict = false
     @rows.each do |row|

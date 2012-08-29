@@ -3,15 +3,12 @@ require 'board'
 require 'console'
 
 class Game
-  attr_reader :board, :current_turn, :current_player, :end_condition
+  attr_reader :board, :current_player
   
   def initialize(player1_marker, player1_type, player2_marker, player2_type, board_size)
     generate_players(player1_marker, player1_type, player2_marker, player2_type)
     generate_board(board_size)
     set_first_player
-    
-    @current_turn = 1
-    @end_condition = nil
   end
   
   def generate_board(board_size)
@@ -24,12 +21,7 @@ class Game
   end
   
   def player(number)
-    case number
-      when 1
-        return @player1
-      when 2
-        return @player2
-    end
+    number == 1 ? @player1 : @player2
   end
   
   def set_first_player
@@ -44,52 +36,28 @@ class Game
   end
   
   def set_current_player
-    case @current_player
-      when @player2
-        @current_player = @player1
-      when @player1
-        @current_player = @player2
-    end
-  end
-  
-  def next_player
-    @current_player == @player1 ? @player2 : @player1
-  end
-  
-  def set_end_condition(condition)
-    @end_condition = condition
-  end
-  
-  def increment_turn
-    @current_turn += 1
-    set_end_condition("Draw!") if @current_turn > @board.grid.count
-  end
-  
-  def check_for_win
-    board = self.board
-    player_markers = [player(1).marker, player(2).marker]
-
-    player_markers.each do |player_marker|
-      player_taken_spaces = []
-      board.grid.each_with_index { |space_content, space_number| player_taken_spaces << space_number if space_content == player_marker }
-      winning_row = ( player_taken_spaces.combination(board.size).to_a.sort! & board.rows ).first
-      if board.rows.include?(winning_row)
-        set_end_condition("Player #{player_marker} wins!")
-        return winning_row
-      end
-    end
+    @current_player == @player2 ? @current_player = @player1 : @current_player = @player2
   end
   
   def start_loop
-    while @end_condition.nil?
+    while !board.game_over?
       board.print_board
       @current_player.get_move(self.board)
-      increment_turn
       set_current_player
-      check_for_win
     end
-    Console.put_message(@end_condition)
+    
+    board.report_end_condition
     board.print_board
+  end
+  
+  def report_end_condition
+    if board.won?
+      board.won_by?(player(1)) ? player = player(1) : player = player(2) 
+      message = "Player #{player.marker} wins!"
+    elsif board.draw?
+      message = "Draw!"
+    end
+    Console.put_message(message)
   end
   
 end

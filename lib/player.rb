@@ -13,7 +13,7 @@ end
 class EasyComputer < Player  
   def get_move(board)
     super
-    
+
     destination = board.open_spaces.shuffle.first
     board.set_move(self.marker, destination)
     destination
