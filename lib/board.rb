@@ -75,6 +75,18 @@ class Board
     return verdict
   end
   
+  def winning_moves(player_marker)
+    moves = []
+    if winning_move_available?(player_marker)
+      ending_move_rows.each do |row|    
+        if view_row_markers(row).reject{|spot_content| spot_content == ''}.select{|spot| spot == player_marker}.count == (@size - 1)
+          moves << row[view_row_markers(row).rindex('')]
+        end
+      end
+    end
+    moves
+  end
+  
   def won_by?(player_marker)
     verdict = false
     @rows.each do |row|

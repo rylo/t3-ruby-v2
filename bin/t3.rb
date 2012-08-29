@@ -5,6 +5,9 @@ require 'runner'
 
 Runner.new
 
-# results = []
-# 300.times { |a| results << Runner.new.game.end_condition }
-# p results
+#results = []
+#300.times { |result| results << Runner.new.game.end_condition }
+#failure_count = results.select{|value| value != "Draw!"}.count
+
+#failure_count > 0 ? verdict = "Sorry, the AI isn't unbeatable yet." : verdict = "Grats! You've slain the minimax monster!"
+#p verdict

@@ -198,6 +198,19 @@ describe Board do
     end
   end
   
+  describe "#winning_moves" do
+    it "should return an array of the marker's winning moves" do      
+      board.set_move(game.player(1).marker, 0)
+      board.set_move(game.player(1).marker, 1)
+      board.set_move(game.player(2).marker, 3)
+      board.winning_moves(game.player(1).marker).should == [2]
+      board.winning_moves(game.player(2).marker).should == []
+      board.set_move(game.player(1).marker, 6)
+      board.set_move(game.player(1).marker, 7)
+      board.winning_moves(game.player(1).marker).should == [2,4,8]
+    end
+  end
+  
 end
 
 

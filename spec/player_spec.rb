@@ -42,16 +42,13 @@ describe UltimateComputer do
   
   it "should be a subclass of Player" do
     game.player(1).class.superclass.should == Player
-    game.player(1).class.should == HardComputer
-  end
-  
-  it "#get_move should return a valid space" do
-    destination = game.player(1).get_move(board)
-    board.valid_move?(destination).should == false
+    game.player(1).class.should == UltimateComputer
   end
   
   describe "#minimax" do
     it "should make an uber AI that puts GlaDoS to shame (at tic-tac-toe)" do
+      pending "Fixing the scoring algorithm"
+      
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(2).marker, 1)
       board.set_move(game.player(1).marker, 8)
@@ -67,7 +64,7 @@ describe UltimateComputer do
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(2).marker, 3)
       
-      game.player(1).get_score(board, game.player(1).marker).should == 4
+      game.player(1).get_score(board, game.player(1).marker).should == 0.20
     end
     
     it "should return a score based on whether or not player can make a game-ending move" do
@@ -75,7 +72,7 @@ describe UltimateComputer do
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(2).marker, 3)
       
-      game.player(1).get_score(board, game.player(1).marker).should == 4
+      game.player(1).get_score(board, game.player(2).marker).should == -0.20
     end
   end
   
@@ -85,5 +82,28 @@ describe UltimateComputer do
     end
   end
   
+  describe "#find_best_move" do
+    it "should return a best move the player can make" do
+      #game.player(1).find_best_move(board).should == 4
+      
+      board.set_move(game.player(1).marker, 0)
+      board.set_move(game.player(1).marker, 2)
+      board.set_move(game.player(1).marker, 4)
+      
+      board.set_move(game.player(2).marker, 1)
+      
+      board.winning_moves(game.player(1).marker).should == [6,8]
+      [6,8].include?(game.player(1).find_best_move(board)).should == true
+    end
+  end
+  
+  describe "#depth_score(depth)" do
+    it "should return the score for the depth" do
+      game.player(1).depth_score(0).should == 0.9
+      game.player(1).depth_score(1).should == 0.6
+      game.player(1).depth_score(2).should == 0.3
+    end
+  end
+
 end
 
