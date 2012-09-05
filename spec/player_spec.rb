@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Player do
-  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, EasyComputer, BOARD_SIZE) }
+  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, EasyComputer, BOARD_SIZE, ConsoleUI) }
   let(:game)        { gamefactory.get_game }
   let(:board)       { game.board }
     
-  before { Console.set_output(MockOutput.new) }
-  before { Console.set_input(MockInput.new) }
+  before { ConsoleUI.set_output(MockOutput.new) }
+  before { ConsoleUI.set_input(MockInput.new) }
   
   it "should have a marker" do
     game.player(1).marker.should == PLAYER1_MARKER
@@ -14,11 +14,11 @@ describe Player do
 end
 
 describe EasyComputer do
-  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, EasyComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
+  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, EasyComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE, ConsoleUI) }
   let(:game)        { gamefactory.get_game }
   let(:board)       { game.board }
   
-  before { Console.set_output(MockOutput.new) }
+  before { ConsoleUI.set_output(MockOutput.new) }
   
   it "should be a subclass of Player" do
     game.player(1).class.superclass.should == Player
@@ -34,11 +34,11 @@ describe EasyComputer do
 end
 
 describe UltimateComputer do
-  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, UltimateComputer, PLAYER2_MARKER, UltimateComputer, BOARD_SIZE) }
+  let(:gamefactory) { GameFactory.new(PLAYER1_MARKER, UltimateComputer, PLAYER2_MARKER, UltimateComputer, BOARD_SIZE, ConsoleUI) }
   let(:game)        { gamefactory.get_game }
   let(:board)       { game.board }
   
-  before { Console.set_output(MockOutput.new) }
+  before { ConsoleUI.set_output(MockOutput.new) }
   
   it "should be a subclass of Player" do
     game.player(1).class.superclass.should == Player

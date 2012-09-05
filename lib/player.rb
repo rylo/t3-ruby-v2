@@ -5,15 +5,10 @@ class Player
     @marker = marker
   end
   
-  def get_move(board)
-    Console.put_message("Player #{self.marker}'s turn.") #extract?
-  end
 end
 
 class EasyComputer < Player  
   def get_move(board)
-    super
-
     destination = board.open_spaces.shuffle.first
     board.set_move(self.marker, destination)
     destination
@@ -22,8 +17,6 @@ end
 
 class UltimateComputer < Player  
   def get_move(board)
-    super
-    
     destination = find_best_move(board)  
     board.set_move(self.marker, destination)
   end
@@ -92,14 +85,11 @@ class UltimateComputer < Player
   def depth_score(depth)
    depth = depth - ((depth-2)*2)
   end
-  
 end
 
 class HumanPlayer < Player
   def get_move(board)
-    super 
-    
-    destination = Console.ask_for_input
+    destination = UI.ask_for_input
     if !board.valid_move?(destination)
       get_move(board)
     else
@@ -108,3 +98,4 @@ class HumanPlayer < Player
     end
   end
 end
+

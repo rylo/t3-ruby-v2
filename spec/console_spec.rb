@@ -1,36 +1,43 @@
 require 'spec_helper'
 
-describe Console do
-  let(:console) { Console }
-  let(:game) { Game.new(PLAYER1_MARKER, PLAYER2_MARKER, BOARD_SIZE) }
+describe ConsoleUI do
+  let(:ui) { ConsoleUI }
+  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE, ui) }
   let(:board) { game.board }
-  
-  before { Console.set_output(MockOutput.new) }
-  before { Console.set_input(MockInput.new) }
+
+  before { ui.set_output(MockOutput.new) }
+  before { ui.set_input(MockInput.new) }
   
   it "accepts user input" do
-    console.get_user_input
-    console.input.last_message.should == "1"
+    ui.get_user_input
+    ui.input.last_message.should == "1"
   end
   
   it "asks for a user to make a move" do
-    console.ask_for_input
-    console.output.last_message.should == "Please enter a move: "
+    ui.ask_for_input
+    ui.output.last_message.should == "Please enter a move: "
   end
   
-  it "should put_message" do
-    console.put_message("Invalid move.")
-    console.output.last_message.should == "Invalid move."
+  describe "#put_message" do
+    it "should put_message" do
+      ui.put_message("Invalid move.")
+      ui.output.last_message.should == "Invalid move."
+    end
+    
+    it "should print every row of an array" do
+      ui.put_message(board.printable_board)
+      ui.output.last_message.should == "||||"
+    end
   end
   
   it "#ask_for_first_player should return a valid player" do
-    console.ask_for_first_player
-    console.input.last_message.should == "1"
+    ui.ask_for_first_player
+    ui.input.last_message.should == "1"
   end
   
   it "allows me to set output" do
     fake = stub
-    console.set_output(fake)
-    console.output.should == fake
+    ui.set_output(fake)
+    ui.output.should == fake
   end
 end

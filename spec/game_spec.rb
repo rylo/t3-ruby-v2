@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Game do
-  let(:console) { Console }
-  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
+  let(:console) { ConsoleUI }
+  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE, ConsoleUI) }
   let(:board) { game.board }
   
-  before { Console.set_output(MockOutput.new) }
-  before { Console.set_input(MockInput.new) }
+  before { ConsoleUI.set_output(MockOutput.new) }
+  before { ConsoleUI.set_input(MockInput.new) }
 
   describe "#initialize" do
     it "returns a player object" do
@@ -24,7 +24,7 @@ describe Game do
     end
     
     it "creates a human and computer player" do
-      game = Game.new(PLAYER1_MARKER, EasyComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE)
+      game = Game.new(PLAYER1_MARKER, EasyComputer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE, ConsoleUI)
     
       game.player(1).class.should == EasyComputer
       game.player(2).class.should == HumanPlayer
@@ -74,7 +74,7 @@ describe Game do
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_state.should == ["Player #{PLAYER2_MARKER} wins!"]
+      game.report_end_state.should == "Player #{PLAYER2_MARKER} wins!"
     end
     
     it "stops the loop when the game is a draw" do
@@ -88,7 +88,7 @@ describe Game do
       board.set_move(game.player(1).marker, 7)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_state.should == ["Draw!"]
+      game.report_end_state.should == "Draw!"
     end
   end
   
@@ -98,7 +98,14 @@ describe Game do
       board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(2).marker, 8)
       
-      game.report_end_state.should == ["Player #{PLAYER2_MARKER} wins!"]
+      game.report_end_state.should == "Player #{PLAYER2_MARKER} wins!"
+    end
+  end
+  
+  describe "#set_ui" do
+    it "should set the ui for the game" do
+      game.set_ui(ConsoleUI)
+      game.ui.should == ConsoleUI
     end
   end
 

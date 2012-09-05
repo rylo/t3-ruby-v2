@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe Board do
-  let(:console) { Console }
-  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE) }
+  let(:ui) { ConsoleUI }
+  let(:game) { Game.new(PLAYER1_MARKER, HumanPlayer, PLAYER2_MARKER, HumanPlayer, BOARD_SIZE, ConsoleUI) }
   let(:board) { Board.new('3') }
   
-  before { Console.set_output(MockOutput.new) }
-  before { Console.set_input(MockInput.new) }
+  before { ConsoleUI.set_output(MockOutput.new) }
+  before { ConsoleUI.set_input(MockInput.new) }
   
   it "should have a size" do
     board.size.should be(3)
   end
   
-  describe "#print_board" do
+  describe "#printable_board" do
     it "should print the board" do
-      board.print_board
-      console.output.messages.last(3).should == ["||||", "||||", "||||"]
+      ui.put_message(board.printable_board)
+      ui.output.messages.last(3).should == ["||||", "||||", "||||"]
     end
   end
   

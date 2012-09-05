@@ -11,9 +11,7 @@ class Board
     grid[space_number.to_i] = ''
   end
   
-  # Take this out of the board class? BP: yeah, probs
-  
-  def print_board
+  def printable_board
     printed_board = []
     processing_rows = @rows[0..(@size-1)]
     
@@ -23,7 +21,6 @@ class Board
       printed_board << printed_row
     end
     
-    printed_board.each { |printed_row| Console.put_message(printed_row) }
     printed_board
   end
   
@@ -118,13 +115,7 @@ class Board
   end
   
   def valid_move?(destination) 
-    if spot_taken?(destination.to_i) || destination.to_i.to_s != destination
-      Console.put_message("Invalid move.")
-      false
-    else
-      Console.put_message("Move made.")
-      true
-    end
+    spot_taken?(destination.to_i) || destination.to_i.to_s != destination ? false : true
   end
   
   def set_move(marker, destination)

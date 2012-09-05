@@ -1,5 +1,18 @@
-module Console
+class UI
   
+  def self.set_output(output)
+    @output = output
+  end
+  
+  def self.set_input(input)
+    @input = input
+  end
+
+end
+
+
+class ConsoleUI < UI
+    
   def self.input
     @input ||= STDIN
   end
@@ -13,25 +26,21 @@ module Console
   end
   
   def self.ask_for_input
-    output.puts "Please enter a move: "
+    put_message("Please enter a move: ")
     get_user_input
   end
   
   def self.ask_for_first_player
-    output.puts "Who goes first?"
+    put_message("Who goes first?")
     get_user_input
   end
   
   def self.put_message(message)
-    output.puts message.to_s
-  end
-  
-  def self.set_output(output)
-    @output = output
-  end
-  
-  def self.set_input(input)
-    @input = input
+    if message.class == String
+      output.puts message.to_s
+    elsif message.class == Array || message.class == Hash
+      message.each { |line| output.puts line }
+    end
   end
   
 end
