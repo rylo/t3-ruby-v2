@@ -57,7 +57,7 @@ class Game
   
   def report_end_state
     if board.won?
-      board.won_by?(player(1)) ? player = player(1) : player = player(2) 
+      board.won_by?(player(1).marker) ? player = player(1) : player = player(2) 
       message = "Player #{player.marker} wins!"
     elsif board.draw?
       message = "Draw!"

@@ -14,13 +14,11 @@ class Board
   def printable_board
     printed_board = []
     processing_rows = @rows[0..(@size-1)]
-    
     processing_rows.each do |processing_row|
       printed_row = '|'
       processing_row.each { |space| printed_row += @grid[space] + "|" }
       printed_board << printed_row
     end
-    
     printed_board
   end
   
@@ -115,12 +113,12 @@ class Board
   end
   
   def valid_move?(destination) 
-    spot_taken?(destination.to_i) || destination.to_i.to_s != destination ? false : true
+    spot_taken?(destination.to_i) || destination.to_i.to_s != destination.to_s ? false : true
   end
   
   def set_move(marker, destination)
     destination = destination.to_i
-    @grid[destination] = marker
+    @grid[destination] = marker if valid_move?(destination) && !game_over?
   end
     
   def generate_rows

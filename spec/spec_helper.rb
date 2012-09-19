@@ -9,7 +9,6 @@ require 'console'
 PLAYER1_MARKER = 'x'
 PLAYER2_MARKER = 'o'
 BOARD_SIZE = 3
-
 MOCK_INPUT = '1'
 
 

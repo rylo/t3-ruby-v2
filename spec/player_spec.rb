@@ -11,6 +11,10 @@ describe Player do
   it "should have a marker" do
     game.player(1).marker.should == PLAYER1_MARKER
   end
+  
+  it "#human? should return false if the player is not a HumanPlayer" do
+    game.player(1).human?.should == true
+  end
 end
 
 describe EasyComputer do

@@ -63,6 +63,23 @@ describe Board do
       board.set_move(PLAYER1_MARKER, 3)
       board.grid.should == ["","","",PLAYER1_MARKER,"","","","",""]
     end
+    
+    it "#set_move won't place a move if the spot is not valid" do
+      board.set_move(PLAYER1_MARKER, 3)
+      board.set_move(PLAYER2_MARKER, 3)
+      board.grid.should == ["","","",PLAYER1_MARKER,"","","","",""]
+    end
+    
+    it "#set_move won't place a move if the game is over" do
+      board.set_move(game.player(1).marker, 0)
+      board.set_move(game.player(1).marker, 1)
+      board.set_move(game.player(1).marker, 2)
+      board.grid.should == [PLAYER1_MARKER,PLAYER1_MARKER,PLAYER1_MARKER,"","","","","",""]
+
+      board.set_move(game.player(1).marker, 3)
+
+      board.grid.should == [PLAYER1_MARKER,PLAYER1_MARKER,PLAYER1_MARKER,"","","","","",""]
+    end
   end
   
   describe "#ending_move_available?" do
@@ -103,11 +120,11 @@ describe Board do
   describe "#playable_rows" do
     it "should give an array with rows with at least one open spot" do
       board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 1)
+      board.set_move(game.player(2).marker, 1)
       board.set_move(game.player(1).marker, 3)
-      board.set_move(game.player(1).marker, 4)
+      board.set_move(game.player(2).marker, 4)
       board.set_move(game.player(1).marker, 8)
-      board.set_move(game.player(1).marker, 7)
+      board.set_move(game.player(2).marker, 7)
       
       board.playable_rows.should == [[0, 1, 2], [2, 4, 6], [2, 5, 8], [3, 4, 5], [6, 7, 8], [0, 3, 6]]
     end
@@ -135,10 +152,10 @@ describe Board do
   
   describe "#unique_row_markers" do
     it "should return an array of unique, non-blank markers in the row" do
+      board.set_move(game.player(2).marker, 3)
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(1).marker, 2)
-      board.set_move(game.player(2).marker, 3)
       
       board.unique_markers([0,1,2]).should == ['x']
       board.unique_markers([0,3,6]).sort.should == ['o', 'x']
@@ -149,10 +166,10 @@ describe Board do
     it "should return an array of empty spaces" do
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
+      board.set_move(game.player(1).marker, 6)
       board.set_move(game.player(2).marker, 3)
       
-      board.open_spaces.should == [4, 5, 6, 7, 8]
+      board.open_spaces.should == [2, 4, 5, 7, 8]
     end
   end
   

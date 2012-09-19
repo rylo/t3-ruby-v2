@@ -5,6 +5,9 @@ class Player
     @marker = marker
   end
   
+  def human?
+    self.class == HumanPlayer
+  end
 end
 
 class EasyComputer < Player  
@@ -89,7 +92,7 @@ end
 
 class HumanPlayer < Player
   def get_move(board)
-    destination = UI.ask_for_input
+    destination = ConsoleUI.ask_for_input
     if !board.valid_move?(destination)
       get_move(board)
     else
