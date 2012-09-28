@@ -55,9 +55,17 @@ class Game
     @ui.put_message(board.printable_board)
   end
   
+  def won_by?(player_marker)
+    verdict = false
+    @board.rows.each do |row|
+      verdict = true if @board.view_row_markers(row).select{|spot| spot == player_marker}.count == @board.size
+    end
+    verdict
+  end
+  
   def report_end_state
-    if board.won?
-      board.won_by?(player(1).marker) ? player = player(1) : player = player(2) 
+    if @board.won?
+      won_by?(player(1).marker) ? player = player(1) : player = player(2) 
       message = "Player #{player.marker} wins!"
     elsif board.draw?
       message = "Draw!"

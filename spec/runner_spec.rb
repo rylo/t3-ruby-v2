@@ -8,6 +8,7 @@ describe Runner do
   before { ConsoleUI.set_input(MockInput.new) }
   
   it "should create a game" do
+    pending "figuring out how to test if the runner ran?"
     runner.game.should_not be_nil
   end
 end

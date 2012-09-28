@@ -117,7 +117,7 @@ describe Board do
     end
   end
   
-  describe "#playable_rows" do
+  describe "#rows_with_open_spaces" do
     it "should give an array with rows with at least one open spot" do
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(2).marker, 1)
@@ -126,7 +126,7 @@ describe Board do
       board.set_move(game.player(1).marker, 8)
       board.set_move(game.player(2).marker, 7)
       
-      board.playable_rows.should == [[0, 1, 2], [2, 4, 6], [2, 5, 8], [3, 4, 5], [6, 7, 8], [0, 3, 6]]
+      board.rows_with_open_spaces.should == [[0, 1, 2], [2, 4, 6], [2, 5, 8], [3, 4, 5], [6, 7, 8], [0, 3, 6]]
     end
   end
   
@@ -137,6 +137,24 @@ describe Board do
       board.spot_taken?(0).should == true
     end
   end
+  
+  #
+  # NOW PRIVATE METHODS
+  #
+  # describe "#generate_playable_rows" do
+  #   it "should generate playable horizontal rows" do
+  #     board.generate_rows[0..2].should eq([[0,1,2], [3,4,5], [6,7,8]])
+  #   end
+  # 
+  #   it "should generate playable diagonal rows" do
+  #     board.generate_rows[3..4].should eq([[0,4,8], [2,4,6]])
+  #   end
+  # 
+  #   it "should generate playable vertical rows" do
+  #     board.generate_rows[5..7].should eq([[0,3,6], [1,4,7], [2,5,8]])
+  #   end
+  # end
+  #
   
   describe "#view_row_markers" do
     it "should return the row with grid markers filled in" do
@@ -180,19 +198,6 @@ describe Board do
       board.spot_taken?(0).should == true
       board.clear_space(0)
       board.spot_taken?(0).should == false
-    end
-  end
-  
-  
-  describe "#won_by?(player_marker)" do
-    it "should return true if the game is won by the player" do      
-      board.set_move(game.player(1).marker, 0)
-      board.won_by?(game.player(1).marker).should == false
-      
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
-      
-      board.won_by?(game.player(1).marker).should == true
     end
   end
   

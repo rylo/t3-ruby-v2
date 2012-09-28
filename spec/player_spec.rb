@@ -32,7 +32,7 @@ describe EasyComputer do
   # add get move stuff testing here
   
   it "#get_move should return a valid space" do
-    destination = game.player(1).get_move(board)
+    destination = game.player(1).get_move(game)
     board.valid_move?(destination).should == false
   end
 end
@@ -55,7 +55,7 @@ describe UltimateComputer do
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(2).marker, 3)
       
-      game.player(1).get_score(board, game.player(1).marker).should == 0.20
+      game.player(1).get_score(game, game.player(1).marker).should == 0.20
     end
     
     it "should return a score based on whether or not player can make a game-ending move" do
@@ -63,7 +63,7 @@ describe UltimateComputer do
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(2).marker, 3)
       
-      game.player(1).get_score(board, game.player(2).marker).should == -0.20
+      game.player(1).get_score(game, game.player(2).marker).should == -0.20
     end
   end
   
@@ -75,14 +75,14 @@ describe UltimateComputer do
   
   describe "#find_best_move" do
     it "should return a best move the player can make" do
-      game.player(1).find_best_move(board).should == 4
+      game.player(1).find_best_move(game).should == 4
       
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(1).marker, 2)
       board.set_move(game.player(1).marker, 4)      
       board.set_move(game.player(2).marker, 1)
       
-      [6,8].include?(game.player(1).find_best_move(board)).should == true
+      [6,8].include?(game.player(1).find_best_move(game)).should == true
     end
     
     it "should return a best move the player can make" do   
@@ -90,13 +90,13 @@ describe UltimateComputer do
       board.set_move(game.player(1).marker, 4)
       board.set_move(game.player(2).marker, 8)
       
-      [6,2].include?(game.player(2).find_best_move(board)).should == true
+      [6,2].include?(game.player(2).find_best_move(game)).should == true
     end
     
     it "should return a best move the player can make" do    
       board.set_move(game.player(1).marker, 4)
       
-      [0,2,6,8].include?(game.player(2).find_best_move(board)).should == true
+      [0,2,6,8].include?(game.player(2).find_best_move(game)).should == true
     end
   end
   

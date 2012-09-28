@@ -1,4 +1,15 @@
 class Board
+  # storage for moves
+  # helpers for board printing ->
+  # enforces Rules of Game
+  
+  
+  # INTERFACE:
+    # new -> generated correctly
+    # set / get moves
+    # available moves
+    # winning row indexes
+  
   attr_reader :size, :grid, :rows
   
   def initialize(board_size)
@@ -28,12 +39,12 @@ class Board
     spaces
   end
   
-  def playable_rows
-    playable_rows = []
+  def rows_with_open_spaces
+    rows_with_open_spaces = []
     open_spaces.each do |open_space|
-      rows.each { |row| playable_rows << row if row.include?(open_space) }
+      rows.each { |row| rows_with_open_spaces << row if row.include?(open_space) }
     end
-    playable_rows.uniq
+    rows_with_open_spaces.uniq
   end
   
   def view_row_markers(row)
@@ -52,7 +63,7 @@ class Board
   
   def ending_move_rows
     ending_rows = []
-    playable_rows.each do |row|
+    rows_with_open_spaces.each do |row|
       if unique_markers(row).count == 1
         ending_rows << row if row.select { |space_number| spot_taken?(space_number) }.count == (@size - 1)
       end
@@ -67,7 +78,7 @@ class Board
         verdict = true
       end
     end
-    return verdict
+    verdict
   end
   
   def winning_moves(player_marker)
@@ -82,14 +93,6 @@ class Board
     moves
   end
   
-  def won_by?(player_marker)
-    verdict = false
-    @rows.each do |row|
-      verdict = true if view_row_markers(row).select{|spot| spot == player_marker}.count == @size
-    end
-    return verdict
-  end
-  
   def game_over?
     self.won? || self.draw?
   end
@@ -101,7 +104,7 @@ class Board
         verdict = true
       end
     end
-    return verdict
+    verdict
   end
   
   def draw?
@@ -112,7 +115,7 @@ class Board
     grid[destination] != ""
   end
   
-  def valid_move?(destination) 
+  def valid_move?(destination)
     spot_taken?(destination.to_i) || destination.to_i.to_s != destination.to_s ? false : true
   end
   
@@ -120,7 +123,9 @@ class Board
     destination = destination.to_i
     @grid[destination] = marker if valid_move?(destination) && !game_over?
   end
-    
+  
+  private
+  
   def generate_rows
     @rows = []
     @grid_space_numbers = []

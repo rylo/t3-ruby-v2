@@ -41,20 +41,6 @@ describe Game do
     end
   end
   
-  describe "#generate_playable_rows" do
-    it "should generate playable horizontal rows" do
-      board.generate_rows[0..2].should eq([[0,1,2], [3,4,5], [6,7,8]])
-    end
-  
-    it "should generate playable diagonal rows" do
-      board.generate_rows[3..4].should eq([[0,4,8], [2,4,6]])
-    end
-  
-    it "should generate playable vertical rows" do
-      board.generate_rows[5..7].should eq([[0,3,6], [1,4,7], [2,5,8]])
-    end
-  end
-  
   it "should have a current_player that changes after the first turn" do
     board.set_move(game.player(1).marker, 3)
     game.set_current_player
@@ -89,6 +75,17 @@ describe Game do
       board.set_move(game.player(2).marker, 8)
       
       game.report_end_state.should == "Draw!"
+    end
+  end
+  
+  describe "#won_by?(player_marker)" do
+    it "should return true if the game is won by the player" do      
+      game.board.set_move(game.player(1).marker, 0)
+      game.board.set_move(game.player(1).marker, 1)
+      game.won_by?(game.player(1).marker).should == false
+      
+      game.board.set_move(game.player(1).marker, 2)
+      game.won_by?(game.player(1).marker).should == true
     end
   end
   
