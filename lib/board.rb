@@ -93,35 +93,19 @@ class Board
     moves
   end
   
-  def game_over?
-    self.won? || self.draw?
-  end
-  
-  def won?
-    verdict = false
-    @rows.each do |row|
-      if unique_markers(row).count == 1 && view_row_markers(row).select { |marker| marker == '' }.count == 0
-        verdict = true
-      end
-    end
-    verdict
-  end
-  
-  def draw?
-    self.open_spaces.count == 0 && !self.won?
-  end
-  
   def spot_taken?(destination)
-    grid[destination] != ""
+    @grid[destination] != ""
   end
   
   def valid_move?(destination)
+    # Move this method to the rules? So it can include checking for game over:
+    #       && !game_over?
     spot_taken?(destination.to_i) || destination.to_i.to_s != destination.to_s ? false : true
   end
   
   def set_move(marker, destination)
     destination = destination.to_i
-    @grid[destination] = marker if valid_move?(destination) && !game_over?
+    @grid[destination] = marker if valid_move?(destination)
   end
   
   private

@@ -7,6 +7,9 @@ class UI
   def self.set_input(input)
     @input = input
   end
+  
+  def self.ask_for_input
+  end
 
 end
 

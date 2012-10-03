@@ -39,6 +39,11 @@ describe Game do
       game.set_first_player
       game.current_player.marker.should == PLAYER1_MARKER
     end
+    
+    it "should have rules" do
+      game.set_rules
+      game.rules.class.should == Rules
+    end
   end
   
   it "should have a current_player that changes after the first turn" do
@@ -62,7 +67,7 @@ describe Game do
       
       game.report_end_state.should == "Player #{PLAYER2_MARKER} wins!"
     end
-    
+
     it "stops the loop when the game is a draw" do
       board.set_move(game.player(1).marker, 0)
       board.set_move(game.player(2).marker, 1)
@@ -75,17 +80,6 @@ describe Game do
       board.set_move(game.player(2).marker, 8)
       
       game.report_end_state.should == "Draw!"
-    end
-  end
-  
-  describe "#won_by?(player_marker)" do
-    it "should return true if the game is won by the player" do      
-      game.board.set_move(game.player(1).marker, 0)
-      game.board.set_move(game.player(1).marker, 1)
-      game.won_by?(game.player(1).marker).should == false
-      
-      game.board.set_move(game.player(1).marker, 2)
-      game.won_by?(game.player(1).marker).should == true
     end
   end
   

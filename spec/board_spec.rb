@@ -19,16 +19,6 @@ describe Board do
     end
   end
   
-  describe "#game_over?" do
-    it "should return true if the game is won or a draw" do
-      board.game_over?.should == false
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)      
-      board.game_over?.should == true
-    end
-  end
-  
   describe '#valid_move?' do
     it "should return false when a user's move is not a valid spot on the board" do
       destination = 'x'
@@ -198,34 +188,6 @@ describe Board do
       board.spot_taken?(0).should == true
       board.clear_space(0)
       board.spot_taken?(0).should == false
-    end
-  end
-  
-  describe "#won?" do
-    it "should return true if the game is won by any player" do      
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 1)
-      board.set_move(game.player(1).marker, 2)
-      
-      board.won?.should == true
-    end
-  end
-  
-  describe "#draw?" do
-    it "should return true if the board is full and there is no winner" do      
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 2)
-      board.set_move(game.player(1).marker, 3)
-      board.set_move(game.player(1).marker, 7)
-      
-      board.set_move(game.player(2).marker, 1)
-      board.set_move(game.player(2).marker, 4)
-      board.set_move(game.player(2).marker, 5)
-      board.set_move(game.player(2).marker, 6)
-      board.set_move(game.player(1).marker, 0)
-      board.set_move(game.player(1).marker, 8)
-      
-      board.draw?.should == true
     end
   end
   

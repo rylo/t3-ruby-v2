@@ -22,14 +22,14 @@ end
 class UltimateComputer < Player  
   def get_move(game)
     destination = find_best_move(game)  
-    board.set_move(self.marker, destination)
+    game.board.set_move(self.marker, destination)
   end
   
   def find_best_move(game)
     best_score = -99
     best_spots = []
     board = game.board
-      
+    
     board.open_spaces.each do |open_space|
       opponent = get_other_player(self.marker)
       board.set_move(self.marker, open_space)
@@ -53,8 +53,9 @@ class UltimateComputer < Player
     best_score = -99
     best_spot = -1
     board = game.board
+    rules = game.rules
 
-    if board.draw? || board.won? || depth == 3
+    if rules.draw?(board) || rules.won?(board) || depth == 3
       best_score = get_score(game, player_marker) * depth_score(depth)
     else
       board.open_spaces.shuffle.each do |open_space|
@@ -71,14 +72,14 @@ class UltimateComputer < Player
     return best_score
   end
   
-  #game instead of board!
   def get_score(game, player_marker)
     opponent_marker = get_other_player(player_marker)
     multiplier = 0.20
     board = game.board
+    rules = game.rules
     
-    if board.won?
-      game.won_by?(player_marker) ? 100 : -100
+    if rules.won?(board)
+      rules.won_by?(board, player_marker) ? 100 : -100
     elsif board.ending_move_available?
       board.winning_move_available?(player_marker) ? multiplier * board.winning_moves(player_marker).count : -multiplier * board.winning_moves(opponent_marker).count 
     else
@@ -98,9 +99,9 @@ end
 class HumanPlayer < Player
   def get_move(game)
     board = game.board
-    destination = ConsoleUI.ask_for_input
+    destination = game.ui.ask_for_input
     if !board.valid_move?(destination)
-      get_move(board)
+      get_move(game)
     else
       board.set_move(self.marker, destination)
       destination

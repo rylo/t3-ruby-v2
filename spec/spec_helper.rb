@@ -1,6 +1,7 @@
 gem 'rspec'
 
 require 'game'
+require 'rules'
 require 'board'
 require 'player'
 require 'runner'
