@@ -1,12 +1,11 @@
 require 'game'
 
-class Runner
-  
-  attr_reader :game
-  
-  def initialize
-    @game = Game.new('x', HumanPlayer, 'o', UltimateComputer, '3', ConsoleUI)
+class Runner  
+  def start
     game.start_loop
   end
   
+  def game
+    Game.new('x', HumanPlayer, 'o', UltimateComputer, '3', ConsoleUI)
+  end
 end
