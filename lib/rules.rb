@@ -1,5 +1,9 @@
 class Rules
   
+  def valid_move?(board, destination)
+    game_over?(board) || board.spot_taken?(destination.to_i) || destination.to_i.to_s != destination.to_s ? false : true
+  end
+  
   def game_over?(board)
     won?(board) || draw?(board)
   end

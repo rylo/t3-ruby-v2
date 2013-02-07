@@ -1,3 +1,5 @@
+require 'rules'
+
 class Board
   # storage for moves
   # helpers for board printing ->
@@ -11,6 +13,10 @@ class Board
     # winning row indexes
   
   attr_reader :size, :grid, :rows
+  
+  def rules
+    Rules.new
+  end
   
   def initialize(board_size)
     @size = board_size.to_i
@@ -97,15 +103,13 @@ class Board
     @grid[destination] != ""
   end
   
-  def valid_move?(destination)
-    # Move this method to the rules? So it can include checking for game over:
-    #       && !game_over?
-    spot_taken?(destination.to_i) || destination.to_i.to_s != destination.to_s ? false : true
-  end
-  
   def set_move(marker, destination)
     destination = destination.to_i
-    @grid[destination] = marker if valid_move?(destination)
+    if rules.valid_move?(self, destination)
+      @grid[destination] = marker
+    else
+      return false
+    end
   end
   
   private

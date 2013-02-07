@@ -19,19 +19,6 @@ describe Board do
     end
   end
   
-  describe '#valid_move?' do
-    it "should return false when a user's move is not a valid spot on the board" do
-      destination = 'x'
-      board.valid_move?(destination).should == false
-    end
-  
-    it "should return false when a user's destination is already taken" do
-      board.set_move(PLAYER1_MARKER, 0)
-      destination = '0'
-      board.valid_move?(destination).should == false
-    end
-  end
-  
   it "should have a grid (array to contain data)" do
     board.grid.should_not be_nil
   end
@@ -65,9 +52,7 @@ describe Board do
       board.set_move(game.player(1).marker, 1)
       board.set_move(game.player(1).marker, 2)
       board.grid.should == [PLAYER1_MARKER,PLAYER1_MARKER,PLAYER1_MARKER,"","","","","",""]
-
       board.set_move(game.player(1).marker, 3)
-
       board.grid.should == [PLAYER1_MARKER,PLAYER1_MARKER,PLAYER1_MARKER,"","","","","",""]
     end
   end

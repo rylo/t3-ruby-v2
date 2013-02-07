@@ -33,7 +33,7 @@ describe EasyComputer do
   
   it "#get_move should return a valid space" do
     destination = game.player(1).get_move(game)
-    board.valid_move?(destination).should == false
+    game.rules.valid_move?(board, destination).should == false
   end
 end
 

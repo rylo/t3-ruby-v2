@@ -57,4 +57,17 @@ describe Rules do
       rules.won_by?(board, game.player(1).marker).should == true
     end
   end
+  
+  describe '#valid_move?' do
+    it "should return false when a user's move is not a valid spot on the board" do
+      destination = 'x'
+      rules.valid_move?(board, destination).should == false
+    end
+  
+    it "should return false when a user's destination is already taken" do
+      board.set_move(PLAYER1_MARKER, 0)
+      destination = '0'
+      rules.valid_move?(board, destination).should == false
+    end
+  end
 end

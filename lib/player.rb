@@ -100,12 +100,10 @@ class HumanPlayer < Player
   def get_move(game)
     board = game.board
     destination = game.ui.ask_for_input
-    if !board.valid_move?(destination)
+    if board.set_move(self.marker, destination) == false
       get_move(game)
-    else
-      board.set_move(self.marker, destination)
-      destination
     end
+    destination
   end
 end
 
