@@ -1,6 +1,7 @@
-require 'player'
-require 'board'
-require 'console'
+require_relative 'player'
+require_relative 'board'
+require_relative 'console'
+require_relative 'rules'
 
 class Game
   attr_reader :board, :rules, :current_player, :ui
@@ -50,10 +51,10 @@ class Game
   end
   
   def start_loop
-    until board.game_over?
+    until rules.game_over?(board)
       @ui.put_message(board.printable_board)
       @ui.put_message("#{@current_player.marker}'s turn.")
-      @current_player.get_move(self.board)
+      @current_player.get_move(self)
       set_current_player
     end
     @ui.put_message(report_end_state)
